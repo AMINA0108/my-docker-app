@@ -1,0 +1,28 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Кодыг татах
+        uses: actions/checkout@v4
+
+      - name: Docker Hub-д нэвтрэх
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker image build хийх
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            aamiii/myapp:latest
+            aamiii/myapp:${{ github.sha }}
